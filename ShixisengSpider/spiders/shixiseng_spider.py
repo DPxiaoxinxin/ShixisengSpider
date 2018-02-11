@@ -15,7 +15,7 @@ class ShixisengSpider(CrawlSpider):
 
     rules = (
         Rule(LinkExtractor(allow='/interns\?p=\d+$',
-                           deny='/user/register\?next=/interns\?p=1'), callback='parse_item', follow=True),
+                           deny='/user/register\?next=/interns\?p=\d+$'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
