@@ -82,7 +82,8 @@ def parse_font_face(font_face):
         fp.write(font_data)
         fp.seek(0)
 
-        font = TTFont(fp.name, fontNumber=1)
+        font = TTFont(fp.name)
+        # font.saveXML("./font.xml")
         # font = get_dict_numb_from_woff(fp.name)
         # return font
 

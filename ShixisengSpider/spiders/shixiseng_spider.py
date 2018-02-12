@@ -7,6 +7,8 @@ from scrapy.spiders import CrawlSpider, Rule
 
 from ShixisengSpider.items import ShixisengspiderItem as Item
 
+from utils.util import replcae_cache
+
 
 class ShixisengSpider(CrawlSpider):
     name = 'shixiseng'
@@ -43,11 +45,13 @@ class ShixisengSpider(CrawlSpider):
         item["job_description"] = "\n".join(response.xpath("//div[@class='con-job job_introduce']//div[@class='job_detail']/span/text()").extract())
         if item["job_description"] == "":
             item["job_description"] = "\n".join(
-                response.xpath("//div[@class='con-job job_introduce']//div[@class='job_detail']/text()").extract())
+                response.xpath("//div[@class='con-job job_introduce']/descendant::text()").extract())
         item["company_description"] = ""
         for node in response.xpath("//div[@class='con-job con-com_introduce/div']"):
             item["company_description"] += node.xpath("./div/text()").extract()[0]
+        if item["company_description"] == "":
+            item["company_description"] = "\n".join(response.xpath("//div[@class='con-job con-com_introduce']/descendant::text()").extract())
         item["job_update_time"] = response.xpath("//div[@class='job_date ']/span/text()").extract()[0]
         item["job_deadline"] = response.xpath("//div[@class='con-job deadline']/div[2]/text()").extract()[0]
-
+        item = replcae_cache(item)
         yield item
